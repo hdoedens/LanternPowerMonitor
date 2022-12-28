@@ -50,7 +50,6 @@ public class PowerServlet extends SecureServiceServlet {
 			DaoEntity payload = getRequestZipBson(_req);
 			List<BreakerPower> powers = DaoSerializer.getList(payload, "readings", BreakerPower.class);
 			if (!powers.isEmpty()) {
-				CollectionUtils.edit(powers, _p->_p.setAccountId(_authCode.getAccountId()));
 				Globals.dao.getProxy().save(powers);
 				int hub = DaoSerializer.getInteger(payload, "hub");
 				HubCommands commands = Globals.getCommandsForHub(_authCode.getAccountId(), hub);
@@ -62,7 +61,6 @@ public class PowerServlet extends SecureServiceServlet {
 		BreakerPower power = getRequestPayload(_req, BreakerPower.class);
 		if (power == null)
 			return;
-		power.setAccountId(_authCode.getAccountId());
 		Globals.dao.putBreakerPower(power);
 	}
 }

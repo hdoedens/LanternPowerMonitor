@@ -1,6 +1,5 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-
 import com.lanternsoftware.util.CollectionUtils;
 import com.lanternsoftware.util.NullUtils;
 import com.lanternsoftware.util.dao.DaoSerializer;
@@ -37,7 +36,8 @@ public class EnergySummary {
 	public EnergySummary() {
 	}
 
-	public EnergySummary(BreakerGroup _group, List<HubPowerMinute> _power, EnergyViewMode _viewMode, Date _start, TimeZone _timezone) {
+	public EnergySummary(BreakerGroup _group, List<HubPowerMinute> _power, EnergyViewMode _viewMode, Date _start,
+			TimeZone _timezone) {
 		groupId = _group.getId();
 		groupName = _group.getName();
 		main = _group.isMain();
@@ -45,7 +45,8 @@ public class EnergySummary {
 		start = _start;
 		accountId = _group.getAccountId();
 		timezone = _timezone;
-		subGroups = CollectionUtils.transform(_group.getSubGroups(), _g -> new EnergySummary(_g, null, _viewMode, _start, timezone));
+		subGroups = CollectionUtils.transform(_group.getSubGroups(),
+				_g -> new EnergySummary(_g, null, _viewMode, _start, timezone));
 		if (_power != null)
 			addEnergy(_group, _power);
 	}
@@ -61,14 +62,17 @@ public class EnergySummary {
 		addEnergy(breakers, breakerKeyToGroup, _hubPower);
 	}
 
-	public void addEnergy(Map<Integer, Breaker> _breakers, Map<Integer, BreakerGroup> _breakerKeyToGroup, List<HubPowerMinute> _hubPower) {
-		if (CollectionUtils.isEmpty(_hubPower) || CollectionUtils.anyQualify(_hubPower, _p -> _p.getAccountId() != accountId))
+	public void addEnergy(Map<Integer, Breaker> _breakers, Map<Integer, BreakerGroup> _breakerKeyToGroup,
+			List<HubPowerMinute> _hubPower) {
+		if (CollectionUtils.isEmpty(_hubPower)
+				|| CollectionUtils.anyQualify(_hubPower, _p -> _p.getAccountId() != accountId))
 			return;
 		_hubPower.sort(Comparator.comparing(HubPowerMinute::getMinute));
 		for (Date minute : CollectionUtils.transformToSet(_hubPower, HubPowerMinute::getMinuteAsDate)) {
 			resetEnergy(minute);
 		}
-		Set<Integer> meterMainsTracked = CollectionUtils.transformToSet(CollectionUtils.filter(_breakers.values(), Breaker::isMain), Breaker::getMeter);
+		Set<Integer> meterMainsTracked = CollectionUtils
+				.transformToSet(CollectionUtils.filter(_breakers.values(), Breaker::isMain), Breaker::getMeter);
 		int idx;
 		Map<Integer, Map<Integer, MeterMinute>> minutes = new HashMap<>();
 		for (HubPowerMinute hubPower : _hubPower) {
@@ -81,7 +85,8 @@ public class EnergySummary {
 				BreakerGroup group = _breakerKeyToGroup.get(key);
 				if (group == null)
 					continue;
-				MeterMinute meter = minutes.computeIfAbsent(hubPower.getMinute(), _p -> new HashMap<>()).computeIfAbsent(b.getMeter(), _m -> new MeterMinute(b.getMeter(), minute));
+				MeterMinute meter = minutes.computeIfAbsent(hubPower.getMinute(), _p -> new HashMap<>())
+						.computeIfAbsent(b.getMeter(), _m -> new MeterMinute(b.getMeter(), minute));
 				idx = 0;
 				for (Float power : CollectionUtils.makeNotNull(breaker.getReadings())) {
 					if (idx >= 60)
@@ -162,7 +167,8 @@ public class EnergySummary {
 		}
 	}
 
-	public static EnergySummary summary(BreakerGroup _group, Map<String, List<EnergyTotal>> _energies, EnergyViewMode _viewMode, Date _start, TimeZone _tz) {
+	public static EnergySummary summary(BreakerGroup _group, Map<String, List<EnergyTotal>> _energies,
+			EnergyViewMode _viewMode, Date _start, TimeZone _tz) {
 		EnergySummary energy = new EnergySummary();
 		energy.setGroupId(_group.getId());
 		energy.setGroupName(_group.getName());
@@ -170,7 +176,8 @@ public class EnergySummary {
 		energy.setViewMode(_viewMode);
 		energy.setStart(_start);
 		energy.setTimeZone(_tz);
-		energy.setSubGroups(CollectionUtils.transform(_group.getSubGroups(), _g -> EnergySummary.summary(_g, _energies, _viewMode, _start, _tz)));
+		energy.setSubGroups(CollectionUtils.transform(_group.getSubGroups(),
+				_g -> EnergySummary.summary(_g, _energies, _viewMode, _start, _tz)));
 		for (EnergyTotal curEnergy : CollectionUtils.makeNotNull(_energies.get(_group.getId()))) {
 			energy.addEnergy(curEnergy.getStart(), curEnergy.getJoules());
 			energy.addFlow(curEnergy.getStart(), curEnergy.getFlow());
@@ -381,7 +388,8 @@ public class EnergySummary {
 		}
 		if ((energy != null) && ((_selectedBreakers == null) || _selectedBreakers.contains(getGroupId()))) {
 			for (float block : energy) {
-				if ((_mode == GridFlow.BOTH) || ((_mode == GridFlow.FROM) && (block > 0f)) || ((_mode == GridFlow.TO) && (block < 0f)))
+				if ((_mode == GridFlow.BOTH) || ((_mode == GridFlow.FROM) && (block > 0f))
+						|| ((_mode == GridFlow.TO) && (block < 0f)))
 					joules += block;
 			}
 		}
@@ -405,7 +413,8 @@ public class EnergySummary {
 		}
 		if ((gridEnergy != null) && ((_selectedBreakers == null) || _selectedBreakers.contains(getGroupId()))) {
 			for (float block : gridEnergy) {
-				if ((_mode == GridFlow.BOTH) || ((_mode == GridFlow.FROM) && (block > 0f)) || ((_mode == GridFlow.TO) && (block < 0f)))
+				if ((_mode == GridFlow.BOTH) || ((_mode == GridFlow.FROM) && (block > 0f))
+						|| ((_mode == GridFlow.TO) && (block < 0f)))
 					flow += block;
 			}
 		}
@@ -442,7 +451,8 @@ public class EnergySummary {
 	private void energyBlocks(Set<String> _selectedGroups, float[] _energyBlocks, GridFlow _flow) {
 		if ((energy != null) && ((_selectedGroups == null) || _selectedGroups.contains(getGroupId()))) {
 			for (int i = 0; i < energy.length; i++) {
-				if ((_flow == GridFlow.BOTH) || ((_flow == GridFlow.FROM) && energy[i] >= 0.0) || ((_flow == GridFlow.TO) && energy[i] <= 0.0))
+				if ((_flow == GridFlow.BOTH) || ((_flow == GridFlow.FROM) && energy[i] >= 0.0)
+						|| ((_flow == GridFlow.TO) && energy[i] <= 0.0))
 					_energyBlocks[i] += energy[i];
 			}
 		}
@@ -453,33 +463,48 @@ public class EnergySummary {
 
 	public List<ChargeSummary> toChargeSummaries(BreakerConfig _config, List<EnergyTotal> _totals) {
 		Map<String, Integer> breakerGroupMeters = _config.getRootGroup().mapToMeters();
-		return CollectionUtils.transform(_config.getBillingPlans(), _p->{
-			double monthKwh = CollectionUtils.sum(CollectionUtils.transform(CollectionUtils.filter(_totals, _t->_t.getStart().getTime() >= _p.getBillingCycleStart(start, timezone).getTime()), EnergyTotal::totalJoules))/3600000.0;
+		return CollectionUtils.transform(_config.getBillingPlans(), _p -> {
+			double monthKwh = CollectionUtils
+					.sum(CollectionUtils
+							.transform(
+									CollectionUtils
+											.filter(_totals,
+													_t -> _t.getStart().getTime() >= _p
+															.getBillingCycleStart(start, timezone).getTime()),
+									EnergyTotal::totalJoules))
+					/ 3600000.0;
 			return toChargeSummary(_p.getPlanId(), _p.getRates(), breakerGroupMeters, new MutableDouble(monthKwh));
 		});
 	}
 
-	public ChargeSummary toChargeSummary(int _planId, List<BillingRate> _rates, Map<String, Integer> _breakerGroupMeters, MutableDouble _monthKwh) {
-		return toChargeSummaryForRates(_planId, CollectionUtils.filter(_rates, _r->_r.isApplicableForDay(start, timezone)), _breakerGroupMeters, _monthKwh);
+	public ChargeSummary toChargeSummary(int _planId, List<BillingRate> _rates,
+			Map<String, Integer> _breakerGroupMeters, MutableDouble _monthKwh) {
+		return toChargeSummaryForRates(_planId,
+				CollectionUtils.filter(_rates, _r -> _r.isApplicableForDay(start, timezone)), _breakerGroupMeters,
+				_monthKwh);
 	}
 
-	private ChargeSummary toChargeSummaryForRates(int _planId, List<BillingRate> _rates, Map<String, Integer> _breakerGroupMeters, MutableDouble _monthKwh) {
+	private ChargeSummary toChargeSummaryForRates(int _planId, List<BillingRate> _rates,
+			Map<String, Integer> _breakerGroupMeters, MutableDouble _monthKwh) {
 		ChargeSummary summary = new ChargeSummary(accountId, _planId, groupId, groupName, viewMode, start, timezone);
 		if (gridEnergy != null) {
 			double[] charges = new double[gridEnergy.length];
 			for (int i = 0; i < gridEnergy.length; i++) {
-				_monthKwh.add(gridEnergy[i]/3600000.0);
+				_monthKwh.add(gridEnergy[i] / 3600000.0);
 				for (BillingRate rate : _rates) {
 					if (gridEnergy[i] > 0f) {
-						if (rate.isApplicable(GridFlow.FROM, DaoSerializer.toInteger(_breakerGroupMeters.get(groupId)), _monthKwh.getValue(), i*60))
+						if (rate.isApplicable(GridFlow.FROM, DaoSerializer.toInteger(_breakerGroupMeters.get(groupId)),
+								_monthKwh.getValue(), i * 60))
 							charges[i] += rate.apply(((double) gridEnergy[i]) / 3600000.0);
-					} else if (rate.isApplicable(GridFlow.TO, DaoSerializer.toInteger(_breakerGroupMeters.get(groupId)), _monthKwh.getValue(), i*60))
+					} else if (rate.isApplicable(GridFlow.TO, DaoSerializer.toInteger(_breakerGroupMeters.get(groupId)),
+							_monthKwh.getValue(), i * 60))
 						charges[i] += rate.apply(((double) gridEnergy[i]) / 3600000.0);
 				}
 			}
 			summary.setCharges(charges);
 		}
-		summary.setSubGroups(CollectionUtils.transform(subGroups, _s->_s.toChargeSummary(_planId, _rates, _breakerGroupMeters, _monthKwh)));
+		summary.setSubGroups(CollectionUtils.transform(subGroups,
+				_s -> _s.toChargeSummary(_planId, _rates, _breakerGroupMeters, _monthKwh)));
 		summary.setTotalUsageJoules(joules(null, true, GridFlow.FROM));
 		summary.setTotalSolarJoules(Math.abs(joules(null, true, GridFlow.TO)));
 		summary.setFromGridJoules(flow(null, true, GridFlow.FROM));

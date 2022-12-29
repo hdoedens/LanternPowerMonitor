@@ -12,8 +12,8 @@
   "breaker_hubs": [
     {
       "hub": 1,
-      "voltage_calibration_factor": 0.609,
-      "port_calibration_factor": 1.241,
+      "voltage_calibration_factor": 0.794,
+      "port_calibration_factor": 1.255,
       "phase_cnt": 2,
       "phase_offset_ns": 0,
       "frequency": 60
@@ -32,12 +32,35 @@
           "breakers": [
             {
               "panel": 1,
-              "space": 1,
+              "space": 1025,
               "meter": 0,
               "hub": 1,
-              "port": 1,
+              "port": 10,
               "name": "Lamp Test",
               "size_amps": 100,
+              "phase_offset_ns": 0,
+              "calibration_factor": 1.0,
+              "low_pass_filter": 1.6,
+              "polarity": "NORMAL",
+              "double_power": false,
+              "type": "SINGLE_POLE_TANDEM",
+              "main": false
+            }
+          ]
+        },
+        {
+          "_id": "4",
+          "account_id": 629,
+          "name": "30 Amps",
+          "breakers": [
+            {
+              "panel": 1,
+              "space": 3,
+              "meter": 0,
+              "hub": 1,
+              "port": 2,
+              "name": "30 Amps",
+              "size_amps": 30,
               "phase_offset_ns": 0,
               "calibration_factor": 1.0,
               "low_pass_filter": 1.6,
@@ -47,9 +70,32 @@
               "main": false
             }
           ]
+        },
+        {
+          "_id": "23",
+          "account_id": 629,
+          "name": "Space 1",
+          "breakers": [
+            {
+              "panel": 1,
+              "space": 2049,
+              "meter": 0,
+              "hub": 0,
+              "port": 0,
+              "name": "Space 1",
+              "size_amps": 20,
+              "phase_offset_ns": 0,
+              "calibration_factor": 1.0,
+              "low_pass_filter": 1.6,
+              "polarity": "NORMAL",
+              "double_power": false,
+              "type": "SINGLE_POLE_TANDEM",
+              "main": false
+            }
+          ]
         }
       ]
     }
   ],
-  "version": 8
+  "version": 20
 }

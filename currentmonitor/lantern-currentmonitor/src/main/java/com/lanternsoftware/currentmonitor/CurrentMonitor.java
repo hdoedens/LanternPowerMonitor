@@ -68,16 +68,16 @@ public class CurrentMonitor {
 		int maxSamples = 240000;
 		CalibrationSample[] samples = new CalibrationSample[maxSamples];
 		int offset = 0;
-		for (;offset < maxSamples; offset++) {
+		for (; offset < maxSamples; offset++) {
 			samples[offset] = new CalibrationSample();
 		}
 		offset = 0;
-		long intervalEnd = System.nanoTime() + 2000000000L; //Scan voltage for 2 seconds
+		long intervalEnd = System.nanoTime() + 2000000000L; // Scan voltage for 2 seconds
 		while (offset < maxSamples) {
 			samples[offset].time = System.nanoTime();
 			samples[offset].voltage = voltagePin.read();
 			offset++;
-			if (samples[offset-1].time > intervalEnd)
+			if (samples[offset - 1].time > intervalEnd)
 				break;
 		}
 		double vOffset = 0.0;
@@ -99,8 +99,7 @@ public class CurrentMonitor {
 			if (under && (samples[sample].voltage > (vOffset * 1.3))) {
 				cycles += 1;
 				under = false;
-			}
-			else if (samples[sample].voltage < vOffset * 0.7) {
+			} else if (samples[sample].voltage < vOffset * 0.7) {
 				under = true;
 			}
 		}
@@ -111,10 +110,10 @@ public class CurrentMonitor {
 			LOG.error("Could not get a valid voltage read, please check that your AC/AC transformer is connected");
 			return null;
 		}
-		int frequency = Math.round(cycles/((samples[offset-1].time-samples[0].time)/100000000f))*10;
+		int frequency = Math.round(cycles / ((samples[offset - 1].time - samples[0].time) / 100000000f)) * 10;
 		LOG.info("Detected Frequency: " + frequency);
 
-		double newCal = ((frequency > 55 ? 120:230)/oldVrms) * _curCalibration;
+		double newCal = ((frequency > 55 ? 120 : 230) / oldVrms) * _curCalibration;
 		double newVrms = newCal * Math.sqrt(vRms);
 		LOG.info("Old Voltage Calibration: {}  Old vRMS: {}", _curCalibration, oldVrms);
 		LOG.info("New Voltage Calibration: {}  New vRMS: {}", newCal, newVrms);
@@ -125,17 +124,18 @@ public class CurrentMonitor {
 		try {
 			stopMonitoring();
 			listener = _listener;
-			List<Breaker> validBreakers = CollectionUtils.filter(_breakers, _b -> _b.getPort() > 0 && _b.getPort() < 16);
+			List<Breaker> validBreakers = CollectionUtils.filter(_breakers,
+					_b -> _b.getPort() > 0 && _b.getPort() < 16);
 			if (CollectionUtils.isEmpty(validBreakers)) {
 				LOG.error("No breakers found for hub number {}", _hub.getHub());
 				return;
 			}
 			LOG.info("Monitoring {} breakers for hub {}", CollectionUtils.size(validBreakers), _hub.getHub());
 			sampler = new Sampler(_hub, validBreakers, _intervalMs, 5);
-			LOG.info("Starting to monitor ports {}", CollectionUtils.transformToCommaSeparated(validBreakers, _b -> String.valueOf(_b.getPort())));
+			LOG.info("Starting to monitor ports {}",
+					CollectionUtils.transformToCommaSeparated(validBreakers, _b -> String.valueOf(_b.getPort())));
 			executor.submit(sampler);
-		}
-		catch (Throwable t) {
+		} catch (Throwable t) {
 			LOG.error("throwable", t);
 		}
 	}
@@ -172,20 +172,20 @@ public class CurrentMonitor {
 		public Sampler(BreakerHub _hub, List<Breaker> _breakers, long _intervalMs, int _concurrentBreakerCnt) {
 			hub = _hub;
 			MCP3008Pin voltagePin = new MCP3008Pin(getChip(0), 0);
-			breakers = CollectionUtils.transform(_breakers, _b->{
+			breakers = CollectionUtils.transform(_breakers, _b -> {
 				LOG.info("Getting Chip {}, Pin {} for port {}", _b.getChip(), _b.getPin(), _b.getPort());
 				MCP3008Pin currentPin = new MCP3008Pin(getChip(_b.getChip()), _b.getPin());
 				List<BreakerSamples> batches = new ArrayList<>(BATCH_CNT);
-				for (int i=0; i<BATCH_CNT; i++) {
-					List<PowerSample> samples = new ArrayList<>(30000/_breakers.size());
-					for (int j=0; j<60000/_breakers.size(); j++) {
+				for (int i = 0; i < BATCH_CNT; i++) {
+					List<PowerSample> samples = new ArrayList<>(30000 / _breakers.size());
+					for (int j = 0; j < 60000 / _breakers.size(); j++) {
 						samples.add(new PowerSample());
 					}
 					batches.add(new BreakerSamples(_b, voltagePin, currentPin, samples));
 				}
 				return batches;
 			});
-			intervalNs = _intervalMs*1000000;
+			intervalNs = _intervalMs * 1000000;
 			concurrentBreakerCnt = Math.min(_breakers.size(), _concurrentBreakerCnt);
 		}
 
@@ -215,7 +215,8 @@ public class CurrentMonitor {
 					final int batch = (int) (interval % BATCH_CNT);
 					while (System.nanoTime() < intervalEnd) {
 						for (curBreaker = 0; curBreaker < concurrentBreakerCnt; curBreaker++) {
-							cycleBreakers[curBreaker] = breakers.get(((cycle * concurrentBreakerCnt) + curBreaker) % breakers.size()).get(batch);
+							cycleBreakers[curBreaker] = breakers
+									.get(((cycle * concurrentBreakerCnt) + curBreaker) % breakers.size()).get(batch);
 							cycleBreakers[curBreaker].incrementCycleCnt();
 						}
 						cycle++;
@@ -235,7 +236,7 @@ public class CurrentMonitor {
 					interval++;
 					final HubSample hubSample = (postSamples && (interval == 10)) ? new HubSample() : null;
 					executor.submit(() -> {
-						long cycleLength = 1000000000/hub.getFrequency();
+						long cycleLength = 1000000000 / hub.getFrequency();
 						if (hubSample != null) {
 							hubSample.setSampleDate(new Date());
 							hubSample.setBreakers(new ArrayList<>());
@@ -250,9 +251,10 @@ public class CurrentMonitor {
 								breakerSample.setSpace(samples.getBreaker().getSpace());
 								hubSample.getBreakers().add(breakerSample);
 							}
-							int phaseOffsetNs = samples.getBreaker().getPhaseOffsetNs()-hub.getPhaseOffsetNs();
+							int phaseOffsetNs = samples.getBreaker().getPhaseOffsetNs() - hub.getPhaseOffsetNs();
 							if (phaseOffsetNs != 0) {
-								Map<Integer, List<PowerSample>> cycles = CollectionUtils.transformToMultiMap(validSamples, _p->_p.cycle);
+								Map<Integer, List<PowerSample>> cycles = CollectionUtils
+										.transformToMultiMap(validSamples, _p -> _p.cycle);
 								for (List<PowerSample> cycleSamples : cycles.values()) {
 									long minNano;
 									long maxNano = minNano = cycleSamples.get(0).nanoTime;
@@ -265,9 +267,11 @@ public class CurrentMonitor {
 									TreeMap<Long, Double> offsetSamples = new TreeMap<>();
 									for (PowerSample sample : cycleSamples) {
 										if (sample.nanoTime + phaseOffsetNs < minNano)
-											offsetSamples.put(sample.nanoTime + phaseOffsetNs + cycleLength, sample.voltage);
+											offsetSamples.put(sample.nanoTime + phaseOffsetNs + cycleLength,
+													sample.voltage);
 										else if (sample.nanoTime + phaseOffsetNs > maxNano)
-											offsetSamples.put(sample.nanoTime + phaseOffsetNs - cycleLength, sample.voltage);
+											offsetSamples.put(sample.nanoTime + phaseOffsetNs - cycleLength,
+													sample.voltage);
 										else
 											offsetSamples.put(sample.nanoTime + phaseOffsetNs, sample.voltage);
 									}
@@ -308,7 +312,8 @@ public class CurrentMonitor {
 							vRms /= validSamples.size();
 							vRms = hub.getVoltageCalibrationFactor() * Math.sqrt(vRms);
 							int lowSampleRatio = (lowSamples * 100) / validSamples.size();
-							double realPower = (hub.getVoltageCalibrationFactor() * hub.getPortCalibrationFactor() * samples.getBreaker().getFinalCalibrationFactor() * pSum) / validSamples.size();
+							double realPower = (hub.getVoltageCalibrationFactor() * hub.getPortCalibrationFactor()
+									* samples.getBreaker().getFinalCalibrationFactor() * pSum) / validSamples.size();
 							if ((lowSampleRatio > 75) && Math.abs(realPower) < 13.0)
 								realPower = 0.0;
 							if (samples.getBreaker().getPolarity() == BreakerPolarity.NORMAL)
@@ -321,12 +326,30 @@ public class CurrentMonitor {
 								realPower *= 2.0;
 							if (debug) {
 								synchronized (CurrentMonitor.this) {
-									LOG.info("===========================Start Port {}", samples.getBreaker().getPort());
+									LOG.info("===========================Start Port {}",
+											samples.getBreaker().getPort());
 									LOG.info("Cycles: {}", samples.getCycleCnt());
 									LOG.info("Samples: {}", samples.getSampleCnt());
-									LOG.info("vMin: {}, vMax: {}, vOffset: {}", String.format("%.3f", CollectionUtils.getSmallest(validSamples, Comparator.comparing(_v -> _v.voltage)).voltage), String.format("%.3f", CollectionUtils.getLargest(validSamples, Comparator.comparing(_v -> _v.voltage)).voltage), String.format("%.3f", vOffset));
-									LOG.info("iMin: {}, iMax: {}, iOffset: {}", String.format("%.3f", CollectionUtils.getSmallest(validSamples, Comparator.comparing(_v -> _v.current)).current), String.format("%.3f", CollectionUtils.getLargest(validSamples, Comparator.comparing(_v -> _v.current)).current), String.format("%.3f", iOffset));
-									double iRms = hub.getPortCalibrationFactor() * samples.getBreaker().getFinalCalibrationFactor() * Math.sqrt(CollectionUtils.mean(CollectionUtils.transform(validSamples, _p -> _p.current * _p.current)));
+									LOG.info("vMin: {}, vMax: {}, vOffset: {}",
+											String.format("%.3f",
+													CollectionUtils.getSmallest(validSamples,
+															Comparator.comparing(_v -> _v.voltage)).voltage),
+											String.format("%.3f",
+													CollectionUtils.getLargest(validSamples,
+															Comparator.comparing(_v -> _v.voltage)).voltage),
+											String.format("%.3f", vOffset));
+									LOG.info("iMin: {}, iMax: {}, iOffset: {}",
+											String.format("%.3f",
+													CollectionUtils.getSmallest(validSamples,
+															Comparator.comparing(_v -> _v.current)).current),
+											String.format("%.3f",
+													CollectionUtils.getLargest(validSamples,
+															Comparator.comparing(_v -> _v.current)).current),
+											String.format("%.3f", iOffset));
+									double iRms = hub.getPortCalibrationFactor()
+											* samples.getBreaker().getFinalCalibrationFactor()
+											* Math.sqrt(CollectionUtils.mean(CollectionUtils.transform(validSamples,
+													_p -> _p.current * _p.current)));
 									LOG.info("vRms: {}", String.format("%.3f", vRms));
 									LOG.info("iRms: {}", String.format("%.3f", iRms));
 									double apparentPower = vRms * iRms;
@@ -339,14 +362,14 @@ public class CurrentMonitor {
 							}
 							samples.setSampleCnt(0);
 							samples.setCycleCnt(0);
-							listener.onPowerEvent(new BreakerPower(samples.getBreaker().getPanel(), samples.getBreaker().getSpace(), readTime, realPower, vRms));
+							listener.onPowerEvent(new BreakerPower(samples.getBreaker().getPanel(),
+									samples.getBreaker().getSpace(), readTime, realPower, vRms));
 						}
 						if (hubSample != null)
 							listener.onSampleEvent(hubSample);
 					});
 				}
-			}
-			catch (Throwable t) {
+			} catch (Throwable t) {
 				LOG.error("Exception while monitoring power", t);
 			}
 		}

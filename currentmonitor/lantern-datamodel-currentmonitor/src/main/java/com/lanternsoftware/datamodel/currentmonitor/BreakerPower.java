@@ -1,8 +1,8 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-import com.lanternsoftware.util.dao.annotations.DBSerializable;
-
 import java.util.Date;
+
+import com.lanternsoftware.util.dao.annotations.DBSerializable;
 
 @DBSerializable(autogen = false)
 public class BreakerPower {
@@ -16,9 +16,9 @@ public class BreakerPower {
 	public BreakerPower() {
 	}
 
-	public BreakerPower(int _panel, int _space, Date _readTime, double _power, double _voltage) {
+	public BreakerPower(int _panel, int _group, Date _readTime, double _power, double _voltage) {
 		panel = _panel;
-		group = _space;
+		group = _group;
 		readTime = _readTime;
 		power = _power;
 		voltage = _voltage;
@@ -61,7 +61,7 @@ public class BreakerPower {
 	}
 
 	public double getPower() {
-		return power;
+		return NumberUtils.round(power, 2);
 	}
 
 	public void setPower(double _power) {
@@ -69,7 +69,7 @@ public class BreakerPower {
 	}
 
 	public double getVoltage() {
-		return voltage;
+		return NumberUtils.round(voltage, 2);
 	}
 
 	public void setVoltage(double _voltage) {

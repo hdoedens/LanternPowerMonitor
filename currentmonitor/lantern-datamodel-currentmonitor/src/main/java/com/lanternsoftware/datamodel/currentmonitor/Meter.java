@@ -7,25 +7,15 @@ import java.util.Objects;
 
 @DBSerializable
 public class Meter implements IIdentical<Meter> {
-	private int accountId;
 	private int index;
 	private String name;
 
 	public Meter() {
 	}
 
-	public Meter(int _accountId, int _index, String _name) {
-		accountId = _accountId;
+	public Meter(int _index, String _name) {
 		index = _index;
 		name = _name;
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int _accountId) {
-		accountId = _accountId;
 	}
 
 	public int getIndex() {
@@ -46,21 +36,25 @@ public class Meter implements IIdentical<Meter> {
 
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
+		if (this == _o)
+			return true;
+		if (_o == null || getClass() != _o.getClass())
+			return false;
 		Meter meter = (Meter) _o;
-		return accountId == meter.accountId && index == meter.index;
+		return index == meter.index;
 	}
 
 	@Override
 	public boolean isIdentical(Meter _o) {
-		if (this == _o) return true;
-		if (_o == null) return false;
-		return accountId == _o.accountId && index == _o.index && Objects.equals(name, _o.name);
+		if (this == _o)
+			return true;
+		if (_o == null)
+			return false;
+		return index == _o.index && Objects.equals(name, _o.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(accountId, index);
+		return Objects.hash(index);
 	}
 }

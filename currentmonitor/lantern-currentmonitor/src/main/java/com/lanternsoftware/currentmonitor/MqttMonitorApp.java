@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lanternsoftware.currentmonitor.led.LEDFlasher;
 import com.lanternsoftware.datamodel.currentmonitor.Breaker;
 import com.lanternsoftware.datamodel.currentmonitor.BreakerConfig;
 import com.lanternsoftware.datamodel.currentmonitor.BreakerHub;
@@ -20,7 +19,6 @@ import com.lanternsoftware.datamodel.currentmonitor.BreakerPowerMinute;
 import com.lanternsoftware.datamodel.currentmonitor.HubPowerMinute;
 import com.lanternsoftware.datamodel.currentmonitor.hub.HubSample;
 import com.lanternsoftware.util.CollectionUtils;
-import com.lanternsoftware.util.NullUtils;
 import com.lanternsoftware.util.ResourceLoader;
 import com.lanternsoftware.util.concurrency.ConcurrencyUtils;
 import com.lanternsoftware.util.dao.DaoEntity;
@@ -70,20 +68,12 @@ class MqttMonitorApp {
             ResourceLoader.writeFile(WORKING_DIR + "config.json", DaoSerializer.toJson(config));
         }
         monitor.setDebug(config.isDebug());
-        monitor.setPostSamples(config.isPostSamples());
-        LEDFlasher.setLEDOn(false);
-        if (NullUtils.isNotEmpty(config.getMqttBrokerUrl()))
-            mqttPoster = new MqttPoster(config);
+        mqttPoster = new MqttPoster(config);
 
-        int configAttempts = 0;
-        while (configAttempts < 5) {
-            breakerConfig = DaoSerializer.parse(ResourceLoader.loadFileAsString(WORKING_DIR + "breaker_config.json"),
-                    BreakerConfig.class);
-            if (breakerConfig != null)
-                break;
-            LOG.error("Failed to load breaker config.  Retrying in 5 seconds...");
-            ConcurrencyUtils.sleep(5000);
-            configAttempts++;
+        breakerConfig = DaoSerializer.parse(ResourceLoader.loadFileAsString(WORKING_DIR + "breaker_config.json"),
+                BreakerConfig.class);
+        if (breakerConfig == null) {
+            breakerConfig = new BreakerConfig();
         }
 
         if (breakerConfig != null) {
@@ -142,7 +132,6 @@ class MqttMonitorApp {
                             post.put("hub", config.getHub());
                             if (curMinute != lastMinute) {
                                 HubPowerMinute minute = new HubPowerMinute();
-                                minute.setAccountId(breakerConfig.getAccountId());
                                 minute.setHub(config.getHub());
                                 minute.setMinute(lastMinute);
                                 minute.setBreakers(CollectionUtils.transform(breakers.entrySet(), _e -> {

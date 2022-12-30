@@ -8,11 +8,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class BreakerEnergyArchiveSerializer extends AbstractDaoSerializer<BreakerEnergyArchive>
-{
+public class BreakerEnergyArchiveSerializer extends AbstractDaoSerializer<BreakerEnergyArchive> {
 	@Override
-	public Class<BreakerEnergyArchive> getSupportedClass()
-	{
+	public Class<BreakerEnergyArchive> getSupportedClass() {
 		return BreakerEnergyArchive.class;
 	}
 
@@ -22,21 +20,19 @@ public class BreakerEnergyArchiveSerializer extends AbstractDaoSerializer<Breake
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(BreakerEnergyArchive _o)
-	{
+	public DaoEntity toDaoEntity(BreakerEnergyArchive _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("panel", _o.getPanel());
-		d.put("space", _o.getSpace());
+		d.put("group", _o.getGroup());
 		d.put("readings", _o.getReadings());
 		return d;
 	}
 
 	@Override
-	public BreakerEnergyArchive fromDaoEntity(DaoEntity _d)
-	{
+	public BreakerEnergyArchive fromDaoEntity(DaoEntity _d) {
 		BreakerEnergyArchive o = new BreakerEnergyArchive();
 		o.setPanel(DaoSerializer.getInteger(_d, "panel"));
-		o.setSpace(DaoSerializer.getInteger(_d, "space"));
+		o.setGroup(DaoSerializer.getInteger(_d, "group"));
 		o.setReadings(DaoSerializer.getByteArray(_d, "readings"));
 		return o;
 	}

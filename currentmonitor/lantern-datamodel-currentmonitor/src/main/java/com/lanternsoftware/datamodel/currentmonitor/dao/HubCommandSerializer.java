@@ -9,11 +9,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class HubCommandSerializer extends AbstractDaoSerializer<HubCommand>
-{
+public class HubCommandSerializer extends AbstractDaoSerializer<HubCommand> {
 	@Override
-	public Class<HubCommand> getSupportedClass()
-	{
+	public Class<HubCommand> getSupportedClass() {
 		return HubCommand.class;
 	}
 
@@ -23,12 +21,10 @@ public class HubCommandSerializer extends AbstractDaoSerializer<HubCommand>
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(HubCommand _o)
-	{
+	public DaoEntity toDaoEntity(HubCommand _o) {
 		DaoEntity d = new DaoEntity();
 		if (_o.getId() != null)
 			d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
 		d.put("hub", _o.getHub());
 		d.put("created", DaoSerializer.toLong(_o.getCreated()));
 		d.put("characteristic", DaoSerializer.toEnumName(_o.getCharacteristic()));
@@ -37,11 +33,9 @@ public class HubCommandSerializer extends AbstractDaoSerializer<HubCommand>
 	}
 
 	@Override
-	public HubCommand fromDaoEntity(DaoEntity _d)
-	{
+	public HubCommand fromDaoEntity(DaoEntity _d) {
 		HubCommand o = new HubCommand();
 		o.setId(DaoSerializer.getString(_d, "_id"));
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setHub(DaoSerializer.getInteger(_d, "hub"));
 		o.setCreated(DaoSerializer.getDate(_d, "created"));
 		o.setCharacteristic(DaoSerializer.getEnum(_d, "characteristic", HubConfigCharacteristic.class));

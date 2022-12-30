@@ -13,11 +13,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerGroupEnergy>
-{
+public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerGroupEnergy> {
 	@Override
-	public Class<BreakerGroupEnergy> getSupportedClass()
-	{
+	public Class<BreakerGroupEnergy> getSupportedClass() {
 		return BreakerGroupEnergy.class;
 	}
 
@@ -27,11 +25,9 @@ public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerG
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(BreakerGroupEnergy _o)
-	{
+	public DaoEntity toDaoEntity(BreakerGroupEnergy _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
 		d.put("group_id", _o.getGroupId());
 		d.put("group_name", _o.getGroupName());
 		d.put("view_mode", DaoSerializer.toEnumName(_o.getViewMode()));
@@ -61,8 +57,7 @@ public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerG
 			if (bb.position() < bb.limit()) {
 				d.put("blocks", Arrays.copyOfRange(bb.array(), 0, bb.position()));
 				d.put("charges", Arrays.copyOfRange(cb.array(), 0, cb.position()));
-			}
-			else {
+			} else {
 				d.put("blocks", bb.array());
 				d.put("charges", cb.array());
 			}
@@ -77,11 +72,9 @@ public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerG
 	}
 
 	@Override
-	public BreakerGroupEnergy fromDaoEntity(DaoEntity _d)
-	{
+	public BreakerGroupEnergy fromDaoEntity(DaoEntity _d) {
 		BreakerGroupEnergy o = new BreakerGroupEnergy();
 		o.setGroupId(DaoSerializer.getString(_d, "group_id"));
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setGroupName(DaoSerializer.getString(_d, "group_name"));
 		o.setViewMode(DaoSerializer.getEnum(_d, "view_mode", EnergyViewMode.class));
 		o.setStart(DaoSerializer.getDate(_d, "start"));
@@ -93,7 +86,8 @@ public class BreakerGroupEnergySerializer extends AbstractDaoSerializer<BreakerG
 			ByteBuffer bb = ByteBuffer.wrap(blockData);
 			Date start = o.getStart();
 			while (bb.hasRemaining()) {
-				EnergyBlock block = new EnergyBlock(start, o.getViewMode().toBlockEnd(start, o.getTimeZone()), bb.getFloat());
+				EnergyBlock block = new EnergyBlock(start, o.getViewMode().toBlockEnd(start, o.getTimeZone()),
+						bb.getFloat());
 				blocks.add(block);
 				start = block.getEnd();
 			}

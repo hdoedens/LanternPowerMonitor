@@ -9,11 +9,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class BillingPlanSerializer extends AbstractDaoSerializer<BillingPlan>
-{
+public class BillingPlanSerializer extends AbstractDaoSerializer<BillingPlan> {
 	@Override
-	public Class<BillingPlan> getSupportedClass()
-	{
+	public Class<BillingPlan> getSupportedClass() {
 		return BillingPlan.class;
 	}
 
@@ -23,10 +21,8 @@ public class BillingPlanSerializer extends AbstractDaoSerializer<BillingPlan>
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(BillingPlan _o)
-	{
+	public DaoEntity toDaoEntity(BillingPlan _o) {
 		DaoEntity d = new DaoEntity();
-		d.put("account_id", _o.getAccountId());
 		d.put("plan_id", _o.getPlanId());
 		d.put("billing_day", _o.getBillingDay());
 		d.put("name", _o.getName());
@@ -35,10 +31,8 @@ public class BillingPlanSerializer extends AbstractDaoSerializer<BillingPlan>
 	}
 
 	@Override
-	public BillingPlan fromDaoEntity(DaoEntity _d)
-	{
+	public BillingPlan fromDaoEntity(DaoEntity _d) {
 		BillingPlan o = new BillingPlan();
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setPlanId(DaoSerializer.getInteger(_d, "plan_id"));
 		o.setBillingDay(DaoSerializer.getInteger(_d, "billing_day"));
 		o.setName(DaoSerializer.getString(_d, "name"));

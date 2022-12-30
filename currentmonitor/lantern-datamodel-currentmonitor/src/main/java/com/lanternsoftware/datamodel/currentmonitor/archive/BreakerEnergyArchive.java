@@ -5,7 +5,7 @@ import com.lanternsoftware.util.dao.annotations.DBSerializable;
 @DBSerializable
 public class BreakerEnergyArchive {
 	private int panel;
-	private int space;
+	private int group;
 	private byte[] readings;
 
 	public int getPanel() {
@@ -16,12 +16,12 @@ public class BreakerEnergyArchive {
 		panel = _panel;
 	}
 
-	public int getSpace() {
-		return space;
+	public int getGroup() {
+		return group;
 	}
 
-	public void setSpace(int _space) {
-		space = _space;
+	public void setGroup(int _group) {
+		group = _group;
 	}
 
 	public byte[] getReadings() {

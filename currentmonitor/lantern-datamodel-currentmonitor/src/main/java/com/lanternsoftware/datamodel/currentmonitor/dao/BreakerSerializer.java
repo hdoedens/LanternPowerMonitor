@@ -10,11 +10,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
-{
+public class BreakerSerializer extends AbstractDaoSerializer<Breaker> {
 	@Override
-	public Class<Breaker> getSupportedClass()
-	{
+	public Class<Breaker> getSupportedClass() {
 		return Breaker.class;
 	}
 
@@ -24,11 +22,10 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(Breaker _o)
-	{
+	public DaoEntity toDaoEntity(Breaker _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("panel", _o.getPanel());
-		d.put("space", _o.getSpace());
+		d.put("group", _o.getGroup());
 		d.put("meter", _o.getMeter());
 		d.put("hub", _o.getHub());
 		d.put("port", _o.getPort());
@@ -46,11 +43,10 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 	}
 
 	@Override
-	public Breaker fromDaoEntity(DaoEntity _d)
-	{
+	public Breaker fromDaoEntity(DaoEntity _d) {
 		Breaker o = new Breaker();
 		o.setPanel(DaoSerializer.getInteger(_d, "panel"));
-		o.setSpace(DaoSerializer.getInteger(_d, "space"));
+		o.setGroup(DaoSerializer.getInteger(_d, "group"));
 		o.setMeter(DaoSerializer.getInteger(_d, "meter"));
 		o.setHub(DaoSerializer.getInteger(_d, "hub"));
 		o.setPort(DaoSerializer.getInteger(_d, "port"));

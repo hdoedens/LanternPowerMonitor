@@ -10,7 +10,7 @@ public class BreakerPanel implements IIdentical<BreakerPanel> {
 	private int accountId;
 	private String name;
 	private int index;
-	private int spaces;
+	private int groups;
 	private int meter;
 
 	public int getAccountId() {
@@ -37,12 +37,12 @@ public class BreakerPanel implements IIdentical<BreakerPanel> {
 		index = _index;
 	}
 
-	public int getSpaces() {
-		return spaces;
+	public int getGroups() {
+		return groups;
 	}
 
-	public void setSpaces(int _spaces) {
-		spaces = _spaces;
+	public void setGroups(int _groups) {
+		groups = _groups;
 	}
 
 	public int getMeter() {
@@ -55,16 +55,20 @@ public class BreakerPanel implements IIdentical<BreakerPanel> {
 
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
+		if (this == _o)
+			return true;
+		if (_o == null || getClass() != _o.getClass())
+			return false;
 		BreakerPanel that = (BreakerPanel) _o;
 		return accountId == that.accountId && index == that.index;
 	}
 
 	@Override
 	public boolean isIdentical(BreakerPanel _o) {
-		if (this == _o) return true;
-		return accountId == _o.accountId && index == _o.index && spaces == _o.spaces && meter == _o.meter && Objects.equals(name, _o.name);
+		if (this == _o)
+			return true;
+		return accountId == _o.accountId && index == _o.index && groups == _o.groups && meter == _o.meter
+				&& Objects.equals(name, _o.name);
 	}
 
 	@Override

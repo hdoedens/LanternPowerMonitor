@@ -12,11 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ChargeSummarySerializer extends AbstractDaoSerializer<ChargeSummary>
-{
+public class ChargeSummarySerializer extends AbstractDaoSerializer<ChargeSummary> {
 	@Override
-	public Class<ChargeSummary> getSupportedClass()
-	{
+	public Class<ChargeSummary> getSupportedClass() {
 		return ChargeSummary.class;
 	}
 
@@ -26,11 +24,9 @@ public class ChargeSummarySerializer extends AbstractDaoSerializer<ChargeSummary
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(ChargeSummary _o)
-	{
+	public DaoEntity toDaoEntity(ChargeSummary _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
 		d.put("plan_id", _o.getPlanId());
 		d.put("group_id", _o.getGroupId());
 		d.put("group_name", _o.getGroupName());
@@ -53,10 +49,8 @@ public class ChargeSummarySerializer extends AbstractDaoSerializer<ChargeSummary
 	}
 
 	@Override
-	public ChargeSummary fromDaoEntity(DaoEntity _d)
-	{
+	public ChargeSummary fromDaoEntity(DaoEntity _d) {
 		ChargeSummary o = new ChargeSummary();
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setPlanId(DaoSerializer.getInteger(_d, "plan_id"));
 		o.setGroupId(DaoSerializer.getString(_d, "group_id"));
 		o.setGroupName(DaoSerializer.getString(_d, "group_name"));

@@ -7,7 +7,7 @@ import java.util.List;
 @DBSerializable(autogen = false)
 public class BreakerPowerMinute {
 	private int panel;
-	private int space;
+	private int group;
 	private List<Float> readings;
 
 	public int getPanel() {
@@ -18,20 +18,20 @@ public class BreakerPowerMinute {
 		panel = _panel;
 	}
 
-	public int getSpace() {
-		return space;
+	public int getGroup() {
+		return group;
 	}
 
-	public void setSpace(int _space) {
-		space = _space;
+	public void setGroup(int _group) {
+		group = _group;
 	}
 
 	public String breakerKey() {
-		return Breaker.key(panel, space);
+		return Breaker.key(panel, group);
 	}
 
 	public int breakerIntKey() {
-		return Breaker.intKey(panel, space);
+		return Breaker.intKey(panel, group);
 	}
 
 	public List<Float> getReadings() {

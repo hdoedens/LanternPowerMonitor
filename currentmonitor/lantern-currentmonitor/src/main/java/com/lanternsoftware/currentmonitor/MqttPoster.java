@@ -22,7 +22,8 @@ public class MqttPoster {
         IMqttClient c = null;
         try {
             LOG.info("Attempting to connect to MQTT broker at {}", _config.getMqttBrokerUrl());
-            c = new MqttClient(_config.getMqttBrokerUrl(), String.format("Lantern_Power_Monitor_Hub_%d", _config.getHub()));
+            c = new MqttClient(_config.getMqttBrokerUrl(),
+                    String.format("Lantern_Power_Monitor_Hub_%d", _config.getHub()));
             MqttConnectOptions options = new MqttConnectOptions();
             options.setAutomaticReconnect(true);
             options.setCleanSession(true);
@@ -42,7 +43,7 @@ public class MqttPoster {
         for (BreakerPower power : CollectionUtils.makeNotNull(_power)) {
             String topic = "lantern_power_monitor/breaker_power/" + power.getKey();
             MqttMessage msg = new MqttMessage(NullUtils.toByteArray(DaoSerializer.toJson(power)));
-            msg.setQos(2);
+            msg.setQos(0);
             msg.setRetained(true);
             try {
                 client.publish(topic, msg);

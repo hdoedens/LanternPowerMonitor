@@ -248,7 +248,7 @@ public class CurrentMonitor {
 								BreakerSample breakerSample = new BreakerSample();
 								breakerSample.setSamples(validSamples);
 								breakerSample.setPanel(samples.getBreaker().getPanel());
-								breakerSample.setSpace(samples.getBreaker().getSpace());
+								breakerSample.setGroup(samples.getBreaker().getGroup());
 								hubSample.getBreakers().add(breakerSample);
 							}
 							int phaseOffsetNs = samples.getBreaker().getPhaseOffsetNs() - hub.getPhaseOffsetNs();
@@ -363,7 +363,7 @@ public class CurrentMonitor {
 							samples.setSampleCnt(0);
 							samples.setCycleCnt(0);
 							listener.onPowerEvent(new BreakerPower(samples.getBreaker().getPanel(),
-									samples.getBreaker().getSpace(), readTime, realPower, vRms));
+									samples.getBreaker().getGroup(), readTime, realPower, vRms));
 						}
 						if (hubSample != null)
 							listener.onSampleEvent(hubSample);

@@ -9,11 +9,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class MonthlyEnergyArchiveSerializer extends AbstractDaoSerializer<MonthlyEnergyArchive>
-{
+public class MonthlyEnergyArchiveSerializer extends AbstractDaoSerializer<MonthlyEnergyArchive> {
 	@Override
-	public Class<MonthlyEnergyArchive> getSupportedClass()
-	{
+	public Class<MonthlyEnergyArchive> getSupportedClass() {
 		return MonthlyEnergyArchive.class;
 	}
 
@@ -23,21 +21,17 @@ public class MonthlyEnergyArchiveSerializer extends AbstractDaoSerializer<Monthl
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(MonthlyEnergyArchive _o)
-	{
+	public DaoEntity toDaoEntity(MonthlyEnergyArchive _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
 		d.put("month", DaoSerializer.toLong(_o.getMonth()));
 		d.put("days", DaoSerializer.toDaoEntities(_o.getDays(), DaoProxyType.MONGO));
 		return d;
 	}
 
 	@Override
-	public MonthlyEnergyArchive fromDaoEntity(DaoEntity _d)
-	{
+	public MonthlyEnergyArchive fromDaoEntity(DaoEntity _d) {
 		MonthlyEnergyArchive o = new MonthlyEnergyArchive();
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setMonth(DaoSerializer.getDate(_d, "month"));
 		o.setDays(DaoSerializer.getList(_d, "days", DailyEnergyArchive.class));
 		return o;

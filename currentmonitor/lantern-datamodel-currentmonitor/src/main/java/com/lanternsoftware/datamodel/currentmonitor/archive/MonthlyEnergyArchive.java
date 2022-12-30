@@ -9,24 +9,15 @@ import java.util.TimeZone;
 
 @DBSerializable(autogen = false)
 public class MonthlyEnergyArchive {
-	private int accountId;
 	private Date month;
 	private List<DailyEnergyArchive> days;
 
 	public String getId() {
-		return toId(accountId, month);
+		return toId(month);
 	}
 
-	public static String toId(int _accountId, Date _month) {
-		return String.format("%d-%d", _accountId, DateUtils.toLong(_month));
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int _accountId) {
-		accountId = _accountId;
+	public static String toId(Date _month) {
+		return String.format("%d-%d", DateUtils.toLong(_month));
 	}
 
 	public Date getMonth() {

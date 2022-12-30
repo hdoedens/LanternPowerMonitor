@@ -1,6 +1,5 @@
 package com.lanternsoftware.currentmonitor;
 
-
 import com.lanternsoftware.datamodel.currentmonitor.Breaker;
 import com.lanternsoftware.util.CollectionUtils;
 import com.lanternsoftware.util.external.LanternFiles;
@@ -18,7 +17,7 @@ public class CreateConfig {
 		c.setMqttVoltageCalibrationFactor(1.0);
 		Breaker b1 = new Breaker();
 		b1.setPanel(0);
-		b1.setSpace(1);
+		b1.setGroup(1);
 		b1.setHub(0);
 		b1.setPort(1);
 		b1.setSizeAmps(20);

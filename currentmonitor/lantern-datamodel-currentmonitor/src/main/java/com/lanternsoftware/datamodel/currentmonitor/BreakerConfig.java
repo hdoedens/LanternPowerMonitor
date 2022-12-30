@@ -151,8 +151,8 @@ public class BreakerConfig implements IIdentical<BreakerConfig> {
 		return getGroupIdForBreaker(_breaker.getKey());
 	}
 
-	public String getGroupIdForBreaker(int _panel, int _space) {
-		return getGroupIdForBreaker(Breaker.key(_panel, _space));
+	public String getGroupIdForBreaker(int _panel, int _group) {
+		return getGroupIdForBreaker(Breaker.key(_panel, _group));
 	}
 
 	public String getGroupIdForBreaker(String _breakerKey) {
@@ -164,8 +164,8 @@ public class BreakerConfig implements IIdentical<BreakerConfig> {
 		return getGroupForBreaker(_breaker.getKey());
 	}
 
-	public BreakerGroup getGroupForBreaker(int _panel, int _space) {
-		return getGroupForBreaker(Breaker.key(_panel, _space));
+	public BreakerGroup getGroupForBreaker(int _panel, int _group) {
+		return getGroupForBreaker(Breaker.key(_panel, _group));
 	}
 
 	public BreakerGroup getGroupForBreaker(String _breakerKey) {

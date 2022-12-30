@@ -8,11 +8,11 @@ import java.util.List;
 @DBSerializable
 public class BreakerSample {
 	private int panel;
-	private int space;
+	private int group;
 	private List<PowerSample> samples;
 
 	public int key() {
-		return Breaker.intKey(panel, space);
+		return Breaker.intKey(panel, group);
 	}
 
 	public int getPanel() {
@@ -23,12 +23,12 @@ public class BreakerSample {
 		panel = _panel;
 	}
 
-	public int getSpace() {
-		return space;
+	public int getGroup() {
+		return group;
 	}
 
-	public void setSpace(int _space) {
-		space = _space;
+	public void setGroup(int _group) {
+		group = _group;
 	}
 
 	public List<PowerSample> getSamples() {

@@ -20,7 +20,7 @@ public class BreakerPowerMinuteSerializer extends AbstractDaoSerializer<BreakerP
 	public DaoEntity toDaoEntity(BreakerPowerMinute _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("panel", _o.getPanel());
-		d.put("space", _o.getSpace());
+		d.put("group", _o.getGroup());
 		ByteBuffer bb = ByteBuffer.allocate(240);
 		for (Float reading : CollectionUtils.makeNotNull(_o.getReadings())) {
 			bb.putFloat(DaoSerializer.toFloat(reading));
@@ -33,7 +33,7 @@ public class BreakerPowerMinuteSerializer extends AbstractDaoSerializer<BreakerP
 	public BreakerPowerMinute fromDaoEntity(DaoEntity _d) {
 		BreakerPowerMinute o = new BreakerPowerMinute();
 		o.setPanel(DaoSerializer.getInteger(_d, "panel"));
-		o.setSpace(DaoSerializer.getInteger(_d, "space"));
+		o.setGroup(DaoSerializer.getInteger(_d, "group"));
 		byte[] data = DaoSerializer.getByteArray(_d, "readings");
 		List<Float> readings = new ArrayList<>();
 		o.setReadings(readings);

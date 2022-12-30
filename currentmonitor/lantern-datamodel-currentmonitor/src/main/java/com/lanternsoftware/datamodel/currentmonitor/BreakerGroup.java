@@ -1,6 +1,5 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-
 import com.lanternsoftware.util.CollectionUtils;
 import com.lanternsoftware.util.IIdentical;
 import com.lanternsoftware.util.NullUtils;
@@ -16,7 +15,8 @@ import java.util.Set;
 
 @DBSerializable()
 public class BreakerGroup implements IIdentical<BreakerGroup> {
-	@PrimaryKey private String id;
+	@PrimaryKey
+	private String id;
 	private int accountId;
 	private String name;
 	private List<BreakerGroup> subGroups;
@@ -130,8 +130,8 @@ public class BreakerGroup implements IIdentical<BreakerGroup> {
 		return getGroupIdForBreaker(_breaker.getKey());
 	}
 
-	public String getGroupIdForBreaker(int _panel, int _space) {
-		return getGroupIdForBreaker(Breaker.key(_panel, _space));
+	public String getGroupIdForBreaker(int _panel, int _group) {
+		return getGroupIdForBreaker(Breaker.key(_panel, _group));
 	}
 
 	public String getGroupIdForBreaker(String _breakerKey) {
@@ -143,14 +143,14 @@ public class BreakerGroup implements IIdentical<BreakerGroup> {
 		return getGroupForBreaker(_breaker.getKey());
 	}
 
-	public BreakerGroup getGroupForBreaker(int _panel, int _space) {
-		return getGroupForBreaker(Breaker.key(_panel, _space));
+	public BreakerGroup getGroupForBreaker(int _panel, int _group) {
+		return getGroupForBreaker(Breaker.key(_panel, _group));
 	}
 
 	public BreakerGroup getGroupForBreaker(String _breakerKey) {
 		if (_breakerKey == null)
 			return null;
-		Breaker b = CollectionUtils.filterOne(breakers, _b->_breakerKey.equals(_b.getKey()));
+		Breaker b = CollectionUtils.filterOne(breakers, _b -> _breakerKey.equals(_b.getKey()));
 		if (b != null)
 			return this;
 		for (BreakerGroup subGroup : CollectionUtils.makeNotNull(subGroups)) {
@@ -183,7 +183,8 @@ public class BreakerGroup implements IIdentical<BreakerGroup> {
 	}
 
 	public boolean containsPolarity(Set<String> _groupIds, BreakerPolarity _polarity) {
-		if ((CollectionUtils.isEmpty(_groupIds) || _groupIds.contains(id)) && CollectionUtils.anyQualify(breakers, _b->_b.getPolarity() == _polarity))
+		if ((CollectionUtils.isEmpty(_groupIds) || _groupIds.contains(id))
+				&& CollectionUtils.anyQualify(breakers, _b -> _b.getPolarity() == _polarity))
 			return true;
 		for (BreakerGroup subGroup : CollectionUtils.makeNotNull(subGroups)) {
 			if (subGroup.containsPolarity(_groupIds, _polarity))
@@ -198,16 +199,19 @@ public class BreakerGroup implements IIdentical<BreakerGroup> {
 
 	public boolean removeInvalidGroups(Set<Integer> _validPanels) {
 		if (subGroups != null)
-			subGroups.removeIf(_g->!_g.removeInvalidGroups(_validPanels));
+			subGroups.removeIf(_g -> !_g.removeInvalidGroups(_validPanels));
 		if (breakers != null)
-			breakers.removeIf(_b->(_b.getType() == null) || (_b.getType() == BreakerType.EMPTY) || !_validPanels.contains(_b.getPanel()));
+			breakers.removeIf(_b -> (_b.getType() == null) || (_b.getType() == BreakerType.EMPTY)
+					|| !_validPanels.contains(_b.getPanel()));
 		return CollectionUtils.isNotEmpty(subGroups) || CollectionUtils.isNotEmpty(breakers);
 	}
 
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
+		if (this == _o)
+			return true;
+		if (_o == null || getClass() != _o.getClass())
+			return false;
 		BreakerGroup that = (BreakerGroup) _o;
 		return Objects.equals(id, that.id);
 	}
@@ -218,7 +222,9 @@ public class BreakerGroup implements IIdentical<BreakerGroup> {
 			return true;
 		if (_o == null)
 			return false;
-		return NullUtils.isEqual(id, _o.id) && accountId == _o.accountId && NullUtils.isEqual(name, _o.name) && CollectionUtils.isIdentical(subGroups, _o.subGroups) && CollectionUtils.isIdentical(breakers, _o.breakers);
+		return NullUtils.isEqual(id, _o.id) && accountId == _o.accountId && NullUtils.isEqual(name, _o.name)
+				&& CollectionUtils.isIdentical(subGroups, _o.subGroups)
+				&& CollectionUtils.isIdentical(breakers, _o.breakers);
 	}
 
 	@Override

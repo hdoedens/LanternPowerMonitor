@@ -25,7 +25,6 @@ public class EnergyTotalSerializer extends AbstractDaoSerializer<EnergyTotal> {
 	public DaoEntity toDaoEntity(EnergyTotal _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
 		d.put("group_id", _o.getGroupId());
 		d.put("view_mode", DaoSerializer.toEnumName(_o.getViewMode()));
 		d.put("start", DaoSerializer.toLong(_o.getStart()));
@@ -43,7 +42,6 @@ public class EnergyTotalSerializer extends AbstractDaoSerializer<EnergyTotal> {
 	public EnergyTotal fromDaoEntity(DaoEntity _d) {
 		EnergyTotal o = new EnergyTotal();
 		o.setGroupId(DaoSerializer.getString(_d, "group_id"));
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
 		o.setViewMode(DaoSerializer.getEnum(_d, "view_mode", EnergyViewMode.class));
 		o.setStart(DaoSerializer.getDate(_d, "start"));
 		o.setSubGroups(DaoSerializer.getList(_d, "sub_groups", EnergyTotal.class));

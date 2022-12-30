@@ -7,29 +7,19 @@ import java.util.Date;
 
 @DBSerializable(autogen = false)
 public class ArchiveStatus {
-	private int accountId;
 	private Date month;
 	private float progress;
 
 	public ArchiveStatus() {
 	}
 
-	public ArchiveStatus(int _accountId, Date _month, float _progress) {
-		accountId = _accountId;
+	public ArchiveStatus(Date _month, float _progress) {
 		month = _month;
 		progress = _progress;
 	}
 
 	public String getId() {
-		return String.format("%d-%d", accountId, DateUtils.toLong(month));
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int _accountId) {
-		accountId = _accountId;
+		return String.format("%d-%d", DateUtils.toLong(month));
 	}
 
 	public Date getMonth() {

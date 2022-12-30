@@ -8,20 +8,11 @@ import java.util.List;
 
 @DBSerializable(autogen = false)
 public class HubSample {
-	private int accountId;
 	private Date sampleDate;
 	private List<BreakerSample> breakers;
 
 	public String getId() {
-		return String.format("%d-%d", accountId, DateUtils.toLong(sampleDate));
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int _accountId) {
-		accountId = _accountId;
+		return String.format("%d-%d", DateUtils.toLong(sampleDate));
 	}
 
 	public Date getSampleDate() {

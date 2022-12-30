@@ -44,7 +44,7 @@ class MqttMonitorApp {
                     readings.add(_power);
                 }
             } else
-                LOG.info("Panel{} - Group{} Power: {}W", _power.getPanel(), Breaker.toSpaceDisplay(_power.getGroup()),
+                LOG.info("Panel{} - Group{} Power: {}W", _power.getPanel(), Breaker.toGroupDisplay(_power.getGroup()),
                         String.format("%.3f", _power.getPower()));
         }
 
@@ -137,7 +137,7 @@ class MqttMonitorApp {
                                 minute.setBreakers(CollectionUtils.transform(breakers.entrySet(), _e -> {
                                     BreakerPowerMinute breaker = new BreakerPowerMinute();
                                     breaker.setPanel(Breaker.toPanel(_e.getKey()));
-                                    breaker.setSpace(Breaker.toSpace(_e.getKey()));
+                                    breaker.setGroup(Breaker.toGroup(_e.getKey()));
                                     breaker.setReadings(CollectionUtils.asArrayList(_e.getValue()));
                                     return breaker;
                                 }));

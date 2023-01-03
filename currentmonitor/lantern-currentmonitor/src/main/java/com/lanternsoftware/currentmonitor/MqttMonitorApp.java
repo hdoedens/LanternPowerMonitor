@@ -19,6 +19,7 @@ import com.lanternsoftware.datamodel.currentmonitor.BreakerPowerMinute;
 import com.lanternsoftware.datamodel.currentmonitor.HubPowerMinute;
 import com.lanternsoftware.datamodel.currentmonitor.hub.HubSample;
 import com.lanternsoftware.util.CollectionUtils;
+import com.lanternsoftware.util.NullUtils;
 import com.lanternsoftware.util.ResourceLoader;
 import com.lanternsoftware.util.concurrency.ConcurrencyUtils;
 import com.lanternsoftware.util.dao.DaoEntity;
@@ -83,7 +84,10 @@ class MqttMonitorApp {
                 if (config.isNeedsCalibration()) {
                     try {
                         CalibrationResult cal = monitor.calibrateVoltage(hub.getVoltageCalibrationFactor());
-                        if (cal != null) {
+                        if (cal == null && NullUtils.isNotEmpty(config.getMqttVoltageTopic())) {
+                            LOG.info("Using Voltage from Mqtt, now defaulting to 230V @ 50Hz");
+                            cal = new CalibrationResult(hub.getVoltageCalibrationFactor(), 50);
+                        } else if (cal != null) {
                             hub.setVoltageCalibrationFactor(cal.getVoltageCalibrationFactor());
                             hub.setFrequency(cal.getFrequency());
                             config.setNeedsCalibration(false);

@@ -9,11 +9,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig>
-{
+public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig> {
 	@Override
-	public Class<MonitorConfig> getSupportedClass()
-	{
+	public Class<MonitorConfig> getSupportedClass() {
 		return MonitorConfig.class;
 	}
 
@@ -23,8 +21,7 @@ public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(MonitorConfig _o)
-	{
+	public DaoEntity toDaoEntity(MonitorConfig _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("host", _o.getHost());
 		d.put("auth_code", _o.getAuthCode());
@@ -39,6 +36,7 @@ public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig
 		d.put("mqtt_broker_url", _o.getMqttBrokerUrl());
 		d.put("mqtt_user_name", _o.getMqttUserName());
 		d.put("mqtt_password", _o.getMqttPassword());
+		d.put("mqtt_voltage_topic", _o.getMqttVoltageTopic());
 		d.put("mqtt_voltage_calibration_factor", _o.getMqttVoltageCalibrationFactor());
 		d.put("mqtt_port_calibration_factor", _o.getMqttPortCalibrationFactor());
 		d.put("mqtt_frequency", _o.getMqttFrequency());
@@ -47,8 +45,7 @@ public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig
 	}
 
 	@Override
-	public MonitorConfig fromDaoEntity(DaoEntity _d)
-	{
+	public MonitorConfig fromDaoEntity(DaoEntity _d) {
 		MonitorConfig o = new MonitorConfig();
 		o.setHost(DaoSerializer.getString(_d, "host"));
 		o.setAuthCode(DaoSerializer.getString(_d, "auth_code"));
@@ -63,6 +60,7 @@ public class MonitorConfigSerializer extends AbstractDaoSerializer<MonitorConfig
 		o.setMqttBrokerUrl(DaoSerializer.getString(_d, "mqtt_broker_url"));
 		o.setMqttUserName(DaoSerializer.getString(_d, "mqtt_user_name"));
 		o.setMqttPassword(DaoSerializer.getString(_d, "mqtt_password"));
+		o.setMqttVoltageTopic(DaoSerializer.getString(_d, "mqtt_voltage_topic"));
 		o.setMqttVoltageCalibrationFactor(DaoSerializer.getDouble(_d, "mqtt_voltage_calibration_factor"));
 		o.setMqttPortCalibrationFactor(DaoSerializer.getDouble(_d, "mqtt_port_calibration_factor"));
 		o.setMqttFrequency(DaoSerializer.getInteger(_d, "mqtt_frequency"));

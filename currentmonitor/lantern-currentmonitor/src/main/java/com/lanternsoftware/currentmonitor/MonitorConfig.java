@@ -1,6 +1,5 @@
 package com.lanternsoftware.currentmonitor;
 
-
 import com.lanternsoftware.datamodel.currentmonitor.Breaker;
 import com.lanternsoftware.util.NullUtils;
 import com.lanternsoftware.util.dao.annotations.DBSerializable;
@@ -22,6 +21,7 @@ public class MonitorConfig {
     private String mqttBrokerUrl;
     private String mqttUserName;
     private String mqttPassword;
+    private String mqttVoltageTopic;
     private double mqttVoltageCalibrationFactor;
     private double mqttPortCalibrationFactor;
     private int mqttFrequency;
@@ -139,6 +139,14 @@ public class MonitorConfig {
         mqttPassword = _mqttPassword;
     }
 
+    public String getMqttVoltageTopic() {
+        return mqttVoltageTopic;
+    }
+
+    public void setMqttVoltageTopic(String _mqttVoltageTopic) {
+        mqttVoltageTopic = _mqttVoltageTopic;
+    }
+
     public double getMqttVoltageCalibrationFactor() {
         return mqttVoltageCalibrationFactor;
     }
@@ -146,7 +154,7 @@ public class MonitorConfig {
     public double getFinalVoltageCalibrationFactor() {
         if (mqttVoltageCalibrationFactor == 0.0)
             mqttVoltageCalibrationFactor = 1.0;
-        return 0.3445* mqttVoltageCalibrationFactor;
+        return 0.3445 * mqttVoltageCalibrationFactor;
     }
 
     public void setMqttVoltageCalibrationFactor(double _mqttVoltageCalibrationFactor) {

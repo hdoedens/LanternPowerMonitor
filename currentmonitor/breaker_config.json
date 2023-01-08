@@ -1,0 +1,73 @@
+{
+  "panels": [
+    {
+      "name": "Panel 1",
+      "index": 1,
+      "spaces": 20,
+      "meter": 0
+    }
+  ],
+  "breaker_hubs": [
+    {
+      "hub": 1,
+      "voltage_calibration_factor": 0.794,
+      "port_calibration_factor": 1.255,
+      "phase_cnt": 1,
+      "phase_offset_ns": 0,
+      "frequency": 30
+    }
+  ],
+  "breaker_groups": [
+    {
+      "_id": "1",
+      "name": "Home",
+      "sub_groups": [
+        {
+          "_id": "1",
+          "name": "Kantoor Harm",
+          "breakers": [
+            {
+              "panel": 1,
+              "group": 3,
+              "meter": 0,
+              "hub": 1,
+              "port": 2,
+              "name": "Kantoor Harm",
+              "size_amps": 30,
+              "phase_offset_ns": 0,
+              "calibration_factor": 1.0,
+              "low_pass_filter": 1.6,
+              "polarity": "NORMAL",
+              "double_power": false,
+              "type": "SINGLE_POLE",
+              "main": false
+            }
+          ]
+        },
+        {
+          "_id": "2",
+          "name": "Kamer Laura",
+          "breakers": [
+            {
+              "panel": 1,
+              "group": 2,
+              "meter": 0,
+              "hub": 1,
+              "port": 3,
+              "name": "Kamer Laura",
+              "size_amps": 30,
+              "phase_offset_ns": 0,
+              "calibration_factor": 1.0,
+              "low_pass_filter": 1.6,
+              "polarity": "NORMAL",
+              "double_power": false,
+              "type": "SINGLE_POLE",
+              "main": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "version": 20
+}

@@ -35,6 +35,7 @@ public class CurrentMonitor {
 	private PowerListener listener;
 	private boolean debug = false;
 	private boolean postSamples = false;
+	private boolean useMqttVoltage = false;
 
 	public boolean isDebug() {
 		return debug;
@@ -120,7 +121,8 @@ public class CurrentMonitor {
 		return new CalibrationResult(newCal, frequency);
 	}
 
-	public void monitorPower(BreakerHub _hub, List<Breaker> _breakers, int _intervalMs, PowerListener _listener) {
+	public void monitorPower(BreakerHub _hub, List<Breaker> _breakers, int _intervalMs, boolean useMqttVoltage,
+			PowerListener _listener) {
 		try {
 			stopMonitoring();
 			listener = _listener;
@@ -131,7 +133,7 @@ public class CurrentMonitor {
 				return;
 			}
 			LOG.info("Monitoring {} breakers for hub {}", CollectionUtils.size(validBreakers), _hub.getHub());
-			sampler = new Sampler(_hub, validBreakers, _intervalMs, 5);
+			sampler = new Sampler(_hub, validBreakers, _intervalMs, 5, useMqttVoltage);
 			LOG.info("Starting to monitor ports {}",
 					CollectionUtils.transformToCommaSeparated(validBreakers, _b -> String.valueOf(_b.getPort())));
 			executor.submit(sampler);
@@ -169,7 +171,9 @@ public class CurrentMonitor {
 		private final long intervalNs;
 		private final int concurrentBreakerCnt;
 
-		public Sampler(BreakerHub _hub, List<Breaker> _breakers, long _intervalMs, int _concurrentBreakerCnt) {
+		public Sampler(BreakerHub _hub, List<Breaker> _breakers, long _intervalMs, int _concurrentBreakerCnt,
+				boolean _useMqttVoltage) {
+			useMqttVoltage = _useMqttVoltage;
 			hub = _hub;
 			MCP3008Pin voltagePin = new MCP3008Pin(getChip(0), 0);
 			breakers = CollectionUtils.transform(_breakers, _b -> {
@@ -227,7 +231,9 @@ public class CurrentMonitor {
 								PowerSample sample = cycleBreakers[curBreaker].incrementSample();
 								sample.nanoTime = curTime;
 								sample.cycle = cycle;
-								sample.voltage = cycleBreakers[curBreaker].getVoltagePin().read();
+								if (!useMqttVoltage) {
+									sample.voltage = cycleBreakers[curBreaker].getVoltagePin().read();
+								}
 								sample.current = cycleBreakers[curBreaker].getCurrentPin().read();
 							}
 							curTime = System.nanoTime();

@@ -1,0 +1,17 @@
+{
+  "host": "https://lanternpowermonitor.com/currentmonitor/",
+  "auth_code": "v3r9jKGGIQFgCJOCigXoNh+Qm0SDDJlj4aYXpC7c3yaXoI25W7u8jagtx8gMD8fyzGLVe5VLm0YAcXbgNyEBDOTxxthD4MQXm+CVIYHciP0=",
+  "hub": 1,
+  "debug": false,
+  "connect_timeout": 3000,
+  "socket_timeout": 5000,
+  "post_samples": false,
+  "needs_calibration": false,
+  "mqtt_broker_url": "tcp://192.168.1.28:1883",
+  "mqtt_user_name": "mqtt",
+  "mqtt_password": "passwd",
+  "mqtt_voltage_topic": "dsmr/reading/phase_voltage_l2",
+  "mqtt_voltage_calibration_factor": 0.0,
+  "mqtt_port_calibration_factor": 1.0,
+  "mqtt_frequency": 60
+}

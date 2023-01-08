@@ -98,7 +98,7 @@ class MqttMonitorApp {
                     }
                 }
                 List<Breaker> breakers = breakerConfig.getBreakersForHub(config.getHub());
-                monitor.monitorPower(hub, breakers, 1000, logger);
+                monitor.monitorPower(hub, breakers, 1000, NullUtils.isNotEmpty(config.getMqttVoltageTopic()), logger);
             }
             monitor.submit(new PowerPoster());
         } else {

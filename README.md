@@ -1,5 +1,5 @@
 # LanternPowerMonitor - Local
-This Lantern Power Monitor fork is a Raspberry Pi service and Java Web Service, that allow you to monitor every electrical breaker in your house, regardless of how many panels or breakers you have. It can be managed using a web interface and it only sends the data to a local MQTT hub. 
+This Lantern Power Monitor fork is a Raspberry Pi service and Java Web Service, that allow you to monitor every electrical breaker in your house, regardless of how many panels or breakers you have. It can be managed using a web interface and it only sends the data to a local MQTT broker (for example Mosquitto MQTT in Home Assistant). 
 <br><br>
 The official website has a lot of technical information:
 <br>

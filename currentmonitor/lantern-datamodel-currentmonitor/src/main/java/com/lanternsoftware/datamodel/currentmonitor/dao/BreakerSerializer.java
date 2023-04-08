@@ -10,11 +10,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
-{
+public class BreakerSerializer extends AbstractDaoSerializer<Breaker> {
 	@Override
-	public Class<Breaker> getSupportedClass()
-	{
+	public Class<Breaker> getSupportedClass() {
 		return Breaker.class;
 	}
 
@@ -24,10 +22,9 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(Breaker _o)
-	{
+	public DaoEntity toDaoEntity(Breaker _o) {
 		DaoEntity d = new DaoEntity();
-		d.put("panel", _o.getPanel());
+		d.put("phaseId", _o.getPhaseId());
 		d.put("space", _o.getSpace());
 		d.put("meter", _o.getMeter());
 		d.put("hub", _o.getHub());
@@ -35,7 +32,6 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 		d.put("name", _o.getName());
 		d.put("description", _o.getDescription());
 		d.put("size_amps", _o.getSizeAmps());
-		d.put("phase_offset_ns", _o.getPhaseOffsetNs());
 		d.put("calibration_factor", _o.getCalibrationFactor());
 		d.put("low_pass_filter", _o.getLowPassFilter());
 		d.put("polarity", DaoSerializer.toEnumName(_o.getPolarity()));
@@ -46,10 +42,9 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 	}
 
 	@Override
-	public Breaker fromDaoEntity(DaoEntity _d)
-	{
+	public Breaker fromDaoEntity(DaoEntity _d) {
 		Breaker o = new Breaker();
-		o.setPanel(DaoSerializer.getInteger(_d, "panel"));
+		o.setPhaseId(DaoSerializer.getInteger(_d, "phase_id"));
 		o.setSpace(DaoSerializer.getInteger(_d, "space"));
 		o.setMeter(DaoSerializer.getInteger(_d, "meter"));
 		o.setHub(DaoSerializer.getInteger(_d, "hub"));
@@ -57,7 +52,6 @@ public class BreakerSerializer extends AbstractDaoSerializer<Breaker>
 		o.setName(DaoSerializer.getString(_d, "name"));
 		o.setDescription(DaoSerializer.getString(_d, "description"));
 		o.setSizeAmps(DaoSerializer.getInteger(_d, "size_amps"));
-		o.setPhaseOffsetNs(DaoSerializer.getInteger(_d, "phase_offset_ns"));
 		o.setCalibrationFactor(DaoSerializer.getDouble(_d, "calibration_factor"));
 		o.setLowPassFilter(DaoSerializer.getDouble(_d, "low_pass_filter"));
 		o.setPolarity(DaoSerializer.getEnum(_d, "polarity", BreakerPolarity.class));

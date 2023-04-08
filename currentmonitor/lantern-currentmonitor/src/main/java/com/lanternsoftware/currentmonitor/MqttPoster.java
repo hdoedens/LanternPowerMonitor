@@ -1,9 +1,7 @@
 package com.lanternsoftware.currentmonitor;
 
-import com.lanternsoftware.datamodel.currentmonitor.BreakerPower;
-import com.lanternsoftware.util.CollectionUtils;
-import com.lanternsoftware.util.NullUtils;
-import com.lanternsoftware.util.dao.DaoSerializer;
+import java.util.List;
+
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -11,26 +9,30 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import com.lanternsoftware.datamodel.currentmonitor.BreakerHub;
+import com.lanternsoftware.datamodel.currentmonitor.BreakerPower;
+import com.lanternsoftware.util.CollectionUtils;
+import com.lanternsoftware.util.NullUtils;
+import com.lanternsoftware.util.dao.DaoSerializer;
 
 public class MqttPoster {
     private static final Logger LOG = LoggerFactory.getLogger(MqttPoster.class);
 
     private final IMqttClient client;
 
-    public MqttPoster(MonitorConfig _config) {
+    public MqttPoster(BreakerHub _hub) {
         IMqttClient c = null;
         try {
-            LOG.info("Attempting to connect to MQTT broker at {}", _config.getMqttBrokerUrl());
-            c = new MqttClient(_config.getMqttBrokerUrl(), String.format("Lantern_Power_Monitor_Hub_%d", _config.getHub()));
+            LOG.info("Attempting to connect to MQTT broker at {}", _hub.getMqttBrokerUrl());
+            c = new MqttClient(_hub.getMqttBrokerUrl(), String.format("Lantern_Power_Monitor_Hub"));
             MqttConnectOptions options = new MqttConnectOptions();
             options.setAutomaticReconnect(true);
             options.setCleanSession(true);
             options.setConnectionTimeout(10);
-            if (NullUtils.isNotEmpty(_config.getMqttUserName()))
-                options.setUserName(_config.getMqttUserName());
-            if (NullUtils.isNotEmpty(_config.getMqttPassword()))
-                options.setPassword(_config.getMqttPassword().toCharArray());
+            if (NullUtils.isNotEmpty(_hub.getMqttUsername()))
+                options.setUserName(_hub.getMqttUsername());
+            if (NullUtils.isNotEmpty(_hub.getMqttPassword()))
+                options.setPassword(_hub.getMqttPassword().toCharArray());
             c.connect(options);
         } catch (Exception e) {
             LOG.error("Failed to create MQTT client", e);

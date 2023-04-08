@@ -1,6 +1,5 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-
 import com.lanternsoftware.util.IIdentical;
 import com.lanternsoftware.util.dao.annotations.DBSerializable;
 
@@ -13,15 +12,15 @@ public class Breaker implements IIdentical<Breaker> {
 	private static final int TANDEM_BREAKER_A_MASK = 1024;
 	private static final int TANDEM_BREAKER_B_MASK = 2048;
 
-	private int panel;
 	private int space;
+	private int phaseId;
 	private int meter;
 	private int hub;
 	private int port;
 	private String name;
 	private String description;
 	private int sizeAmps;
-	private int phaseOffsetNs;
+	// private int phaseOffsetNs;
 	private double calibrationFactor;
 	private double lowPassFilter;
 	private BreakerPolarity polarity;
@@ -33,22 +32,23 @@ public class Breaker implements IIdentical<Breaker> {
 	public Breaker() {
 	}
 
-	public Breaker(String _name, int _panel, int _space, int _hub, int _port, int _sizeAmps, double _lowPassFilter) {
+	public Breaker(String _name, int _panel, int _space, int _phaseId, int _hub, int _port, int _sizeAmps,
+			double _lowPassFilter) {
 		name = _name;
-		panel = _panel;
 		space = _space;
+		space = _phaseId;
 		hub = _hub;
 		port = _port;
 		sizeAmps = _sizeAmps;
 		lowPassFilter = _lowPassFilter;
 	}
 
-	public int getPanel() {
-		return panel;
+	public int getPhaseId() {
+		return phaseId;
 	}
 
-	public void setPanel(int _panel) {
-		panel = _panel;
+	public void setPhaseId(int _phaseId) {
+		phaseId = _phaseId;
 		key = null;
 	}
 
@@ -141,13 +141,13 @@ public class Breaker implements IIdentical<Breaker> {
 		sizeAmps = _sizeAmps;
 	}
 
-	public int getPhaseOffsetNs() {
-		return phaseOffsetNs;
-	}
+	// public int getPhaseOffsetNs() {
+	// return phaseOffsetNs;
+	// }
 
-	public void setPhaseOffsetNs(int _phaseOffsetNs) {
-		phaseOffsetNs = _phaseOffsetNs;
-	}
+	// public void setPhaseOffsetNs(int _phaseOffsetNs) {
+	// phaseOffsetNs = _phaseOffsetNs;
+	// }
 
 	public double getLowPassFilter() {
 		return Math.abs(lowPassFilter) < 0.05 ? 1.6 : lowPassFilter;
@@ -208,20 +208,20 @@ public class Breaker implements IIdentical<Breaker> {
 
 	public String getKey() {
 		if (key == null)
-			key = key(panel, space);
+			key = key(space, phaseId);
 		return key;
 	}
 
 	public int getIntKey() {
-		return intKey(panel, space);
+		return intKey(space, phaseId);
 	}
 
 	public static int intKeyToPanel(int _intKey) {
-		return _intKey/10000;
+		return _intKey / 10000;
 	}
 
 	public static int intKeyToSpace(int _intKey) {
-		return _intKey%10000;
+		return _intKey % 10000;
 	}
 
 	public static String key(int _panel, int _space) {
@@ -229,7 +229,7 @@ public class Breaker implements IIdentical<Breaker> {
 	}
 
 	public static int intKey(int _panel, int _space) {
-		return 10000*_panel + _space;
+		return 10000 * _panel + _space;
 	}
 
 	public static int portToChip(int _port) {
@@ -252,8 +252,8 @@ public class Breaker implements IIdentical<Breaker> {
 		return (TANDEM_BREAKER_B_MASK & _space) != 0;
 	}
 
-	public static int toId(int _panel, int _space) {
-		return (_panel << 12) | _space;
+	public static int toId(int _space, int _phaseId) {
+		return (_phaseId << 4) | _space;
 	}
 
 	public static int toPanel(int _id) {
@@ -278,20 +278,28 @@ public class Breaker implements IIdentical<Breaker> {
 
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
+		if (this == _o)
+			return true;
+		if (_o == null || getClass() != _o.getClass())
+			return false;
 		Breaker breaker = (Breaker) _o;
-		return panel == breaker.panel && space == breaker.space;
+		return phaseId == breaker.phaseId && space == breaker.space;
 	}
 
 	@Override
 	public boolean isIdentical(Breaker _o) {
-		if (this == _o) return true;
-		return panel == _o.panel && space == _o.space && meter == _o.meter && hub == _o.hub && port == _o.port && sizeAmps == _o.sizeAmps && phaseOffsetNs == _o.phaseOffsetNs && Double.compare(_o.calibrationFactor, calibrationFactor) == 0 && Double.compare(_o.lowPassFilter, lowPassFilter) == 0 && doublePower == _o.doublePower && Objects.equals(name, _o.name) && Objects.equals(description, _o.description) && polarity == _o.polarity && type == _o.type;
+		if (this == _o)
+			return true;
+		return phaseId == _o.phaseId && space == _o.space && meter == _o.meter && hub == _o.hub && port == _o.port
+				&& sizeAmps == _o.sizeAmps
+				&& Double.compare(_o.calibrationFactor, calibrationFactor) == 0
+				&& Double.compare(_o.lowPassFilter, lowPassFilter) == 0 && doublePower == _o.doublePower
+				&& Objects.equals(name, _o.name) && Objects.equals(description, _o.description)
+				&& polarity == _o.polarity && type == _o.type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(panel, space);
+		return Objects.hash(space, phaseId);
 	}
 }

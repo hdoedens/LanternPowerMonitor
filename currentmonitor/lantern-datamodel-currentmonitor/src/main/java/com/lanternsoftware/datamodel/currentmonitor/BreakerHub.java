@@ -1,27 +1,73 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
+import java.util.List;
+import java.util.Objects;
 
 import com.lanternsoftware.util.IIdentical;
 import com.lanternsoftware.util.dao.annotations.DBSerializable;
 
-import java.util.Objects;
-
 @DBSerializable(autogen = false)
 public class BreakerHub implements IIdentical<BreakerHub> {
-	private int hub;
 	private double voltageCalibrationFactor;
 	private double portCalibrationFactor;
-	private int phaseCnt;
-	private int phaseOffsetNs;
+	private List<Phase> phases;
 	private int frequency;
-	private String bluetoothMac;
+	private String mqttBrokerUrl;
+	private String mqttUsername;
+	private String mqttPassword;
+	private boolean needsCalibration;
+	private boolean debug;
 
-	public int getHub() {
-		return hub;
+	public void setMqttBrokerUrl(String _mqttBrokerUrl) {
+		mqttBrokerUrl = _mqttBrokerUrl;
 	}
 
-	public void setHub(int _hub) {
-		hub = _hub;
+	public void setMqttUsername(String _mqttUsername) {
+		mqttUsername = _mqttUsername;
+	}
+
+	public void setMqttPassword(String _mqttPassword) {
+		mqttPassword = _mqttPassword;
+	}
+
+	public String getMqttBrokerUrl() {
+		return mqttBrokerUrl;
+	}
+
+	public String getMqttUsername() {
+		return mqttUsername;
+	}
+
+	public String getMqttPassword() {
+		return mqttPassword;
+	}
+
+	public String getmqttBrokerUrl() {
+		return mqttBrokerUrl;
+	}
+
+	public void setNeedsCalibration(boolean _needsCalibration) {
+		needsCalibration = _needsCalibration;
+	}
+
+	public void setDebug(boolean _debug) {
+		debug = _debug;
+	}
+
+	public boolean isNeedsCalibration() {
+		return needsCalibration;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public List<Phase> getPhases() {
+		return phases;
+	}
+
+	public void setPhases(List<Phase> _phases) {
+		phases = _phases;
 	}
 
 	public double getRawVoltageCalibrationFactor() {
@@ -29,7 +75,7 @@ public class BreakerHub implements IIdentical<BreakerHub> {
 	}
 
 	public double getVoltageCalibrationFactor() {
-		return voltageCalibrationFactor == 0.0?0.3445:voltageCalibrationFactor;
+		return voltageCalibrationFactor == 0.0 ? 0.3445 : voltageCalibrationFactor;
 	}
 
 	public void setVoltageCalibrationFactor(double _voltageCalibrationFactor) {
@@ -41,7 +87,7 @@ public class BreakerHub implements IIdentical<BreakerHub> {
 	}
 
 	public double getPortCalibrationFactor() {
-		return portCalibrationFactor == 0.0?1.20:portCalibrationFactor;
+		return portCalibrationFactor == 0.0 ? 1.20 : portCalibrationFactor;
 	}
 
 	public void setPortCalibrationFactor(double _portCalibrationFactor) {
@@ -49,19 +95,7 @@ public class BreakerHub implements IIdentical<BreakerHub> {
 	}
 
 	public int getPhaseCnt() {
-		return phaseCnt == 0 ? 2 : phaseCnt;
-	}
-
-	public void setPhaseCnt(int _phaseCnt) {
-		phaseCnt = _phaseCnt;
-	}
-
-	public int getPhaseOffsetNs() {
-		return phaseOffsetNs;
-	}
-
-	public void setPhaseOffsetNs(int _phaseOffsetNs) {
-		phaseOffsetNs = _phaseOffsetNs;
+		return phases.size();
 	}
 
 	public int getFrequency() {
@@ -72,30 +106,31 @@ public class BreakerHub implements IIdentical<BreakerHub> {
 		frequency = _frequency;
 	}
 
-	public String getBluetoothMac() {
-		return bluetoothMac;
-	}
-
-	public void setBluetoothMac(String _bluetoothMac) {
-		bluetoothMac = _bluetoothMac;
-	}
-
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
-		BreakerHub that = (BreakerHub) _o;
-		return hub == that.hub;
+		return true;
 	}
 
 	@Override
 	public boolean isIdentical(BreakerHub _o) {
-		if (this == _o) return true;
-		return hub == _o.hub && Double.compare(_o.voltageCalibrationFactor, voltageCalibrationFactor) == 0 && Double.compare(_o.portCalibrationFactor, portCalibrationFactor) == 0 && getPhaseCnt() == _o.getPhaseCnt() && getPhaseOffsetNs() == _o.getPhaseOffsetNs() && getFrequency() == _o.getFrequency() && Objects.equals(bluetoothMac, _o.bluetoothMac);
+		if (this == _o)
+			return true;
+		return Double.compare(_o.voltageCalibrationFactor, voltageCalibrationFactor) == 0
+				&& Double.compare(_o.portCalibrationFactor, portCalibrationFactor) == 0
+				&& getPhaseCnt() == _o.getPhaseCnt()
+				&& getFrequency() == _o.getFrequency();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(hub);
+		return Objects.hash("foo");
+	}
+
+	public Phase getPhaseForBreaker(Breaker breaker) {
+		for (Phase phase : phases) {
+			if (breaker.getPhaseId() == phase.getId())
+				return phase;
+		}
+		return null;
 	}
 }

@@ -1,15 +1,13 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-
 import com.lanternsoftware.util.dao.annotations.DBSerializable;
 
 import java.util.Date;
 
 @DBSerializable(autogen = false)
 public class BreakerPower {
-	private int accountId;
-	private int panel;
 	private int space;
+	private int phaseId;
 	private Date readTime;
 	private String hubVersion;
 	private double power;
@@ -18,32 +16,24 @@ public class BreakerPower {
 	public BreakerPower() {
 	}
 
-	public BreakerPower(int _panel, int _space, Date _readTime, double _power, double _voltage) {
-		panel = _panel;
+	public BreakerPower(int _phaseId, int _space, Date _readTime, double _power, double _voltage) {
 		space = _space;
+		phaseId = _phaseId;
 		readTime = _readTime;
 		power = _power;
 		voltage = _voltage;
 	}
 
 	public String getId() {
-		return String.format("%d-%d-%d", accountId, panel, space);
+		return String.format("%d-%d", space, phaseId);
 	}
 
-	public int getAccountId() {
-		return accountId;
+	public int getPhaseId() {
+		return phaseId;
 	}
 
-	public void setAccountId(int _accountId) {
-		accountId = _accountId;
-	}
-
-	public int getPanel() {
-		return panel;
-	}
-
-	public void setPanel(int _panel) {
-		panel = _panel;
+	public void setPhaseId(int _phaseId) {
+		phaseId = _phaseId;
 	}
 
 	public int getSpace() {
@@ -87,6 +77,6 @@ public class BreakerPower {
 	}
 
 	public String getKey() {
-		return Breaker.key(panel, space);
+		return Breaker.key(space, phaseId);
 	}
 }

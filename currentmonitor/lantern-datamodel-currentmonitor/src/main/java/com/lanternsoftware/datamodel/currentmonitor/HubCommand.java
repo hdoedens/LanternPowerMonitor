@@ -1,16 +1,15 @@
 package com.lanternsoftware.datamodel.currentmonitor;
 
-import com.lanternsoftware.util.CollectionUtils;
+import java.util.Date;
+import java.util.Objects;
+
 import com.lanternsoftware.util.dao.annotations.DBSerializable;
 import com.lanternsoftware.util.dao.annotations.PrimaryKey;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 @DBSerializable
 public class HubCommand {
-	@PrimaryKey	private String id;
+	@PrimaryKey
+	private String id;
 	private int accountId;
 	private int hub;
 	private Date created;
@@ -75,10 +74,6 @@ public class HubCommand {
 		data = _data;
 	}
 
-	public List<HubCommand> forAllHubs(BreakerConfig _config) {
-		return CollectionUtils.transform(_config.getBreakerHubs(), _h->forHub(_h.getHub()));
-	}
-
 	public HubCommand forHub(int _hub) {
 		HubCommand c = new HubCommand();
 		c.setAccountId(accountId);
@@ -91,8 +86,10 @@ public class HubCommand {
 
 	@Override
 	public boolean equals(Object _o) {
-		if (this == _o) return true;
-		if (_o == null || getClass() != _o.getClass()) return false;
+		if (this == _o)
+			return true;
+		if (_o == null || getClass() != _o.getClass())
+			return false;
 		HubCommand that = (HubCommand) _o;
 		return Objects.equals(id, that.id);
 	}

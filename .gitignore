@@ -7,3 +7,5 @@
 *target/
 build/
 release/
+.DS_Store
+currentmonitor/.vscode/settings.json

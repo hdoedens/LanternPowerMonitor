@@ -9,11 +9,9 @@ import com.lanternsoftware.util.dao.DaoSerializer;
 import java.util.Collections;
 import java.util.List;
 
-public class BreakerPowerSerializer extends AbstractDaoSerializer<BreakerPower>
-{
+public class BreakerPowerSerializer extends AbstractDaoSerializer<BreakerPower> {
 	@Override
-	public Class<BreakerPower> getSupportedClass()
-	{
+	public Class<BreakerPower> getSupportedClass() {
 		return BreakerPower.class;
 	}
 
@@ -23,13 +21,11 @@ public class BreakerPowerSerializer extends AbstractDaoSerializer<BreakerPower>
 	}
 
 	@Override
-	public DaoEntity toDaoEntity(BreakerPower _o)
-	{
+	public DaoEntity toDaoEntity(BreakerPower _o) {
 		DaoEntity d = new DaoEntity();
 		d.put("_id", _o.getId());
-		d.put("account_id", _o.getAccountId());
-		d.put("panel", _o.getPanel());
 		d.put("space", _o.getSpace());
+		d.put("phase_id", _o.getPhaseId());
 		d.put("key", _o.getKey());
 		d.put("read_time", DaoSerializer.toLong(_o.getReadTime()));
 		d.put("hub_version", _o.getHubVersion());
@@ -39,12 +35,10 @@ public class BreakerPowerSerializer extends AbstractDaoSerializer<BreakerPower>
 	}
 
 	@Override
-	public BreakerPower fromDaoEntity(DaoEntity _d)
-	{
+	public BreakerPower fromDaoEntity(DaoEntity _d) {
 		BreakerPower o = new BreakerPower();
-		o.setAccountId(DaoSerializer.getInteger(_d, "account_id"));
-		o.setPanel(DaoSerializer.getInteger(_d, "panel"));
 		o.setSpace(DaoSerializer.getInteger(_d, "space"));
+		o.setPhaseId(DaoSerializer.getInteger(_d, "phase_id"));
 		o.setReadTime(DaoSerializer.getDate(_d, "read_time"));
 		o.setHubVersion(DaoSerializer.getString(_d, "hub_version"));
 		o.setPower(DaoSerializer.getDouble(_d, "power"));

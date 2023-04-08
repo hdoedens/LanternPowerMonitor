@@ -7,20 +7,20 @@ import java.util.List;
 
 @DBSerializable
 public class BreakerSample {
-	private int panel;
 	private int space;
+	private int phaseId;
 	private List<PowerSample> samples;
 
 	public int key() {
-		return Breaker.intKey(panel, space);
+		return Breaker.intKey(phaseId, space);
 	}
 
-	public int getPanel() {
-		return panel;
+	public int getPhaseId() {
+		return phaseId;
 	}
 
-	public void setPanel(int _panel) {
-		panel = _panel;
+	public void setPhaseId(int _phaseId) {
+		phaseId = _phaseId;
 	}
 
 	public int getSpace() {

@@ -14,3 +14,11 @@ The android application won't work with this version. Configuring the hub is don
 The iOS application also won't work with this version. Configuring the hub is done through a web UI.
 <br>
 
+## Installation
+Flash an SD card with the following [image](https://cf.lanternpowermonitor.com/hub_1.1.1.zip) using [Balena Etcher](https://www.balena.io/etcher/).
+
+Power up the Pi and copy the latest release of the LanternPowerMonitor 'local' jar to the Pi. Do not restart the CurrentMonitor service yet, unless you have the correct breaker_config.json on the Pi also:
+
+```scp lantern-currentmonitor.jar pi@<ip of your rpi>:/opt/currentmonitor```
+
+Restart the currentmonitor service from the rpi commandline `systemctl restart currentmonitor` or use the lantern-config UI to restart the service from a webbrowser.
